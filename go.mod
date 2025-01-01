@@ -2,7 +2,7 @@ module github.com/suzuki-shunsuke/gen-go-jsonschema
 
 go 1.23.4
 
-require github.com/invopop/jsonschema v0.12.0
+require github.com/invopop/jsonschema v0.13.0
 
 require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
