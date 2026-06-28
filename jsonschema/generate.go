@@ -7,10 +7,25 @@ import (
 	"strings"
 
 	"github.com/invopop/jsonschema"
+	"golang.org/x/mod/modfile"
 )
 
-func Write(src any, path string) error {
-	s := jsonschema.Reflect(src)
+type Options struct {
+	ModFile string
+}
+
+func Write(src any, path string, opts *Options) error {
+	r := &jsonschema.Reflector{}
+	if opts != nil && opts.ModFile != "" {
+		m, err := os.ReadFile(opts.ModFile)
+		if err != nil {
+			return fmt.Errorf("read mod file: %w", err)
+		}
+		if err := r.AddGoComments(modfile.ModulePath(m), "."); err != nil {
+			return err
+		}
+	}
+	s := r.Reflect(src)
 	b, err := json.MarshalIndent(s, "", "  ")
 	if err != nil {
 		return fmt.Errorf("marshal schema as JSON: %w", err)
